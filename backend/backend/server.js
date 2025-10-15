@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import authControllers from "./routes/authControllers.js";
+import applicantControllers from "./routes/applicantControllers.js";
 
 dotenv.config();
 
@@ -30,6 +31,15 @@ app.get('/api/message', (req, res) => {
 
 // signup and login routes
 app.use("/api/auth", authControllers);
+
+// applicant routes
+app.use("/api/applicant", applicantControllers);
+
+// admin routes
+app.use("/api/admin", adminControllers);
+
+// bot mimic routes
+app.use("/api/bot", botControllers);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => 
