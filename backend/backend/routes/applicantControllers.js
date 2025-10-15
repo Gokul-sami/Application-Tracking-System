@@ -12,10 +12,11 @@ function getUserFromToken(req) {
   try {
     return jwt.verify(token, process.env.JWT_SECRET);
   } catch (err) {
-    return json({ message: "Invalid or expired token" });
+    return null;
   }
 }
 
+// get all jobs
 router.get("/job/all", async (req, res) => {
   try {
     const jobs = await Job.find().sort({ createdAt: -1 });
@@ -83,6 +84,37 @@ router.get("/my-application", async (req, res) => {
     res.json(applications);
   } catch (err) {
     res.status(500).json({ message: "Error retrieving applications", error: err.message });
+  }
+});
+
+// Get specific application
+router.get("/application/:id", async (req, res) => {
+  try {
+    const user = getUserFromToken(req);
+    if (!user) return res.status(401).json({ message: "Unauthorized" });
+
+    const { id } = req.params;
+    const application = await Application.findOne({
+      _id: id,
+      applicantId: user.id,
+    })
+      .populate("jobId", "title")
+      .populate("history.updatedBy", "name role");
+
+    if (!application)
+      return res.status(404).json({ message: "Application not found" });
+
+    res.status(200).json({
+      message: "Application retrieved",
+      jobTitle: application.jobId.title,
+      currentStatus: application.status,
+      history: application.history,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error retrieving application",
+      error: err.message,
+    });
   }
 });
 

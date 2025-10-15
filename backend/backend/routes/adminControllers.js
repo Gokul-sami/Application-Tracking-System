@@ -6,19 +6,22 @@ import { decompressSync } from "three/examples/jsm/libs/fflate.module.js";
 
 const router = express.Router();
 
+// get admin from token
+function getAdminFromToken(req) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ message: "No token provided" });
+  const token = authHeader.split(" ")[1];
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    return null;
+  }
+}
+
 // create job
 router.post("/job/create", async (req, res) => {
   try {
-    // Get token from headers
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).json({ message: "No token provided" });
-    }
-
-    const token = authHeader.split(" ")[1];
-
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = getAdminFromToken(req);
 
     // Verify admin
     if (decoded.role !== "admin") {
@@ -71,19 +74,10 @@ router.get("/job/:jobId/applications", async (req, res) => {
 // update status
 router.put("/applications/:id/status", async (req, res) => {
   try {
-    console.log(req.params);
     const { id } = req.params;
     const { status, comment } = req.body;
 
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).json({ message: "No token provided" });
-    }
-
-    const token = authHeader.split(" ")[1];
-
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = getAdminFromToken(req);
 
     // Verify admin
     if (decoded.role !== "admin") {
