@@ -5,8 +5,6 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
-const JWT_SECRET = "english_or_spanish";
-
 router.post("/signup", async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -31,6 +29,7 @@ router.post("/signup", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
+    console.log(process.env.JWT_SECRET);
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
@@ -42,11 +41,11 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
 
     // Generate JWT token
-    if (!JWT_SECRET)
+    if (!process.env.JWT_SECRET)
       return res.status(500).json({ message: "Server configuration error" });
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
-      JWT_SECRET,
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
