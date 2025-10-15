@@ -1,6 +1,7 @@
 import express from "express";
 import Job from "../models/Job.js";
 import Application from "../models/Application.js";
+import Log from "../models/Log.js";
 import jwt from "jsonwebtoken";
 
 const router = express.Router();
@@ -48,6 +49,9 @@ router.post("/job/apply/:jobId", async (req, res) => {
         .status(400)
         .json({ message: "You have already applied for this job" });
 
+    const isAdmin = job.jobType === "Non-technical"
+    let role = isAdmin ? "admin" : "bot mimic"
+
     // Create new application
     const application = new Application({
       jobId,
@@ -57,9 +61,9 @@ router.post("/job/apply/:jobId", async (req, res) => {
       history: [
         {
           status: "Applied",
-          updatedBy: user.id,
-          role: "bot",
-          Comment: "Application submitted"
+          updatedBy: "bot mimic",
+          Comment: "Application submitted",
+          timestamp: new Date(),
         }
       ]
     });

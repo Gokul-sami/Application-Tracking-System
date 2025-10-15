@@ -8,8 +8,7 @@ const applicationSchema = new mongoose.Schema({
   history: [
     {
         status: { type: String },
-        updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        role: { type: String, enum: ["admin", "bot"] },
+        updatedBy: { type: String, enum: ["admin", "bot mimic"] },
         Comment: { type: String },
         timestamp: { type: Date, default: Date.now },
     }

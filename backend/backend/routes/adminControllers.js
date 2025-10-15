@@ -2,7 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import Job from "../models/Job.js";
 import Application from "../models/Application.js";
-import { decompressSync } from "three/examples/jsm/libs/fflate.module.js";
+import Log from "../models/Log.js";
 
 const router = express.Router();
 
@@ -100,9 +100,9 @@ router.put("/applications/:id/status", async (req, res) => {
     // Add entry to history
     application.history.push({
       status,
-      updatedBy: decoded.id,
-      role: decoded.role,
+      updatedBy: "admin",
       Comment: comment || `Status changed to ${status}`,
+      timestamp: new Date(),
     });
 
     await application.save();
