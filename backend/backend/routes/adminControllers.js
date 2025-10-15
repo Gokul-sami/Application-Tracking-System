@@ -2,9 +2,11 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import Job from "../models/Job.js";
 import Application from "../models/Application.js";
+import { decompressSync } from "three/examples/jsm/libs/fflate.module.js";
 
 const router = express.Router();
 
+// create job
 router.post("/job/create", async (req, res) => {
   try {
     // Get token from headers
@@ -40,6 +42,7 @@ router.post("/job/create", async (req, res) => {
   }
 });
 
+// get applications for a job
 router.get("/job/:jobId/applications", async (req, res) => {
   try {
     const { jobId } = req.params;
@@ -65,8 +68,10 @@ router.get("/job/:jobId/applications", async (req, res) => {
   }
 });
 
-router.put("/job/applications/:id/status", async (req, res) => {
+// update status
+router.put("/applications/:id/status", async (req, res) => {
   try {
+    console.log(req.params);
     const { id } = req.params;
     const { status, comment } = req.body;
 
@@ -95,13 +100,13 @@ router.put("/job/applications/:id/status", async (req, res) => {
     const application = await Application.findById(id);
     if (!application) return res.status(404).json({ message: "Application not found" });
 
-    // Update main status
+    // Update status
     application.status = status;
 
     // Add entry to history
     application.history.push({
       status,
-      updatedBy: req.admin.id,
+      updatedBy: decoded.id,
       role: decoded.role,
       Comment: comment || `Status changed to ${status}`,
     });
