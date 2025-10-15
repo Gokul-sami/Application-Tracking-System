@@ -71,7 +71,7 @@ router.post("/job/apply/:jobId", async (req, res) => {
 });
 
 // Get all applications
-router.get("/application", async (req, res) => {
+router.get("/my-application", async (req, res) => {
   try {
     const user = getUserFromToken(req);
     if (!user) return res.status(401).json({ message: "Unauthorized" });
