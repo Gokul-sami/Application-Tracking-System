@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import authControllers from "./routes/authControllers.js";
 import applicantControllers from "./routes/applicantControllers.js";
+import adminControllers from "./routes/adminControllers.js";
+import botControllers from "./routes/botControllers.js";
 
 dotenv.config();
 
