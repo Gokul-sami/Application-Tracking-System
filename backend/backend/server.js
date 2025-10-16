@@ -6,12 +6,13 @@ import authControllers from "./routes/authControllers.js";
 import applicantControllers from "./routes/applicantControllers.js";
 import adminControllers from "./routes/adminControllers.js";
 import botControllers from "./routes/botControllers.js";
+import { corsOptions } from "./config/corsConfig.js";
 
 dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

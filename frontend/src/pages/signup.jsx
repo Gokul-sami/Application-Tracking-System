@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import API from "../api/axiosInstance";
+import axios from "axios";
 import "./styles/Signup.css";
 import Prism from "../components/Prism";
 
@@ -10,10 +10,10 @@ const Signup = () => {
     name: "",
     email: "",
     password: "",
-    role: "applicant",
   });
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,12 +23,26 @@ const Signup = () => {
     e.preventDefault();
     setError("");
     setMessage("");
+    setLoading(true);
+
     try {
-      const res = await API.post("/auth/signup", formData);
-      setMessage(res.data.message || "Signup successful!");
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKENDURL}/auth/signup`,
+        {
+          ...formData,
+          role: "applicant",
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      setMessage(response.data.message || "Signup successful!");
       setTimeout(() => navigate("/"), 1500);
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,7 +61,7 @@ const Signup = () => {
       />
 
       <div className="signup-card">
-        <h2>Create Account ✨</h2>
+        <h2>Create Account</h2>
         <p>Join us and start your journey</p>
 
         {error && <p className="error-message">{error}</p>}
@@ -81,13 +95,9 @@ const Signup = () => {
             required
           />
 
-          <label>Role</label>
-          <select name="role" onChange={handleChange} value={formData.role}>
-            <option value="applicant">Applicant</option>
-            <option value="admin">Admin</option>
-          </select>
-
-          <button type="submit">Sign Up</button>
+          <button type="submit" disabled={loading}>
+            {loading ? "Signing up..." : "Sign Up"}
+          </button>
         </form>
 
         <p className="login-link">
