@@ -73,7 +73,7 @@ router.post("/job/apply/:jobId", async (req, res) => {
       action: "Application Submitted",
       role: "applicant",
       updatedBy: user.id,
-      comment: "Application submitted by applicant",
+      comment: "Application submitted by "+ user.name +" for "+ job.title,
       timestamp: new Date(),
     });
 

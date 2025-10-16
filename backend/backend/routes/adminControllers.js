@@ -18,6 +18,16 @@ function getAdminFromToken(req) {
   }
 }
 
+// get all jobs
+router.get("/job/all", async (req, res) => {
+  try {
+    const jobs = await Job.find().sort({ createdAt: -1 });
+    res.status(200).json(jobs);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching jobs", error: err.message });
+  }
+});
+
 // create job
 router.post("/job/create", async (req, res) => {
   try {
@@ -110,7 +120,7 @@ router.put("/applications/:id/status", async (req, res) => {
       action: "Status Updated",
       role: "admin",
       updatedBy: decoded.id,
-      comment: "Application status changed to " + status,
+      comment: "Application status changed by "+ decoded.name +" as " + status,
       timestamp: new Date(),
     });
     
