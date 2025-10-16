@@ -68,6 +68,16 @@ router.post("/job/apply/:jobId", async (req, res) => {
       ]
     });
 
+    const log = new Log({
+      applicationId: application._id,
+      action: "Application Submitted",
+      role: "applicant",
+      updatedBy: user.id,
+      comment: "Application submitted by applicant",
+      timestamp: new Date(),
+    });
+
+    await log.save();
     await application.save();
     res.status(201).json({ message: "Application submitted", application });
   } catch (err) {

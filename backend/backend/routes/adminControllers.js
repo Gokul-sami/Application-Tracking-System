@@ -105,6 +105,16 @@ router.put("/applications/:id/status", async (req, res) => {
       timestamp: new Date(),
     });
 
+    const log = new Log({
+      applicationId: id,
+      action: "Status Updated",
+      role: "admin",
+      updatedBy: decoded.id,
+      comment: "Application status changed to " + status,
+      timestamp: new Date(),
+    });
+    
+    await log.save();
     await application.save();
 
     res.status(200).json({

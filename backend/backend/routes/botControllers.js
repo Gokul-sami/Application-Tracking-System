@@ -55,6 +55,17 @@ router.get("/update/application", async (req, res) => {
             Comment: `Bot automatically progressed to ${nextStatus}`,
             timestamp: new Date(),
           });
+
+          const log = new Log({
+            applicationId: app.id,
+            action: "Status Updated",
+            role: "bot mimic",
+            updatedBy: decoded.id,
+            comment: "Application status changed to " + nextStatus,
+            timestamp: new Date(),
+          });
+          await log.save();
+          
         } else {
           app.status = "Rejected";
           app.history.push({
@@ -63,6 +74,16 @@ router.get("/update/application", async (req, res) => {
             Comment: "Bot automatically rejected after review",
             timestamp: new Date(),
           });
+
+          const log = new Log({
+            applicationId: app.id,
+            action: "Status Updated",
+            role: "bot mimic",
+            updatedBy: decoded.id,
+            comment: "Application got Rejected",
+            timestamp: new Date(),
+          });
+          await log.save();
         }
 
         await app.save();
