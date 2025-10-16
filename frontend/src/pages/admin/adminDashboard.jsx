@@ -15,7 +15,7 @@ const AdminDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const jobsRes = await axios.get(`${import.meta.env.VITE_BACKENDURL}/admin/jobs`, {
+      const jobsRes = await axios.get(`${import.meta.env.VITE_BACKENDURL}/admin/job/all`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

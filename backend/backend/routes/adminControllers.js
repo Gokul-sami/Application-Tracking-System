@@ -28,6 +28,16 @@ router.get("/job/all", async (req, res) => {
   }
 });
 
+// get applications count
+router.get("/applications/count", async (req, res) => {
+  try {
+    const totalApplications = await Application.countDocuments();
+    res.status(200).json({ totalApplications });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching applications count", error: err.message });
+  }
+});
+
 // create job
 router.post("/job/create", async (req, res) => {
   try {
