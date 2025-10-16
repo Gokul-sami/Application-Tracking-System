@@ -25,7 +25,7 @@ const JobForm = ({ onClose, onJobCreated }) => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        `${import.meta.env.VITE_BACKENDURL}/admin/create-job`,
+        `${import.meta.env.VITE_BACKENDURL}/admin/job/create`,
         formData,
         {
           headers: {

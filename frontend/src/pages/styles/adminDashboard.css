@@ -83,3 +83,16 @@
   width: 90%;
   max-width: 500px;
 }
+
+.view-btn {
+  background: none;
+  border: none;
+  color: #5227ff;
+  /* font-size: 1.2rem; */
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.view-btn:hover {
+  transform: translateX(4px);
+}

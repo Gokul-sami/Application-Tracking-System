@@ -65,6 +65,18 @@ router.post("/job/create", async (req, res) => {
   }
 });
 
+// get job details
+router.get("/job/:jobId", async (req, res) => {
+  try {
+    const { jobId } = req.params;
+    const job = await Job.findById(jobId);
+    if (!job) return res.status(404).json({ message: "Job not found" });
+    res.status(200).json(job);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching job", error: err.message });
+  }
+});
+
 // get applications for a job
 router.get("/job/:jobId/applications", async (req, res) => {
   try {

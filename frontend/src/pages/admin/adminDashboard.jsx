@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/AdminDashboard.css";
 import JobForm from "../../components/JobForm";
+import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [jobs, setJobs] = useState([]);
   const [applicationsCount, setApplicationsCount] = useState(0);
   const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchDashboardData();
@@ -23,7 +25,7 @@ const AdminDashboard = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setJobs(jobsRes.data.jobs || []);
+      setJobs(jobsRes.data || []);
       setApplicationsCount(appsRes.data.totalApplications || 0);
     } catch (err) {
       console.error("Error fetching dashboard data:", err);
@@ -35,16 +37,20 @@ const AdminDashboard = () => {
     setShowForm(false);
   };
 
+  // job applications page
+  const handleViewApplications = (jobId) => {
+    navigate(`/admin/job/${jobId}/applications`);
+  };
+
   return (
     <div className="admin-dashboard">
       <header className="admin-header">
         <h2>Admin Dashboard</h2>
         <button onClick={() => setShowForm(true)} className="create-job-btn">
-          + Create Job
+          Create Job
         </button>
       </header>
 
-      {/* Analytics Section */}
       <div className="admin-analytics">
         <div className="stat-card">
           <h3>{jobs.length}</h3>
@@ -69,7 +75,8 @@ const AdminDashboard = () => {
                 <th>Job Type</th>
                 <th>Location</th>
                 <th>Salary</th>
-                <th>Created</th>
+                <th>Created on</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -80,6 +87,14 @@ const AdminDashboard = () => {
                   <td>{job.location}</td>
                   <td>{job.salary ? `₹${job.salary}` : "N/A"}</td>
                   <td>{new Date(job.createdAt).toLocaleDateString()}</td>
+                  <td>
+                    <button
+                      className="view-btn"
+                      onClick={() => handleViewApplications(job._id)}
+                    >
+                      view applications  &rarr;
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -87,7 +102,7 @@ const AdminDashboard = () => {
         )}
       </section>
 
-      {/* Job Creation Modal */}
+      {/* create job */}
       {showForm && (
         <div className="modal-overlay" onClick={() => setShowForm(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>

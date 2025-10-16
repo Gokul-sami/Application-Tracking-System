@@ -4,6 +4,7 @@ import './index.css'
 import Login from './pages/login.jsx';
 import Signup from './pages/signup.jsx';
 import AdminDashboard from './pages/admin/adminDashboard.jsx';
+import JobApplications from './pages/admin/jobApplication.jsx';
 
 import {
   createBrowserRouter,
@@ -22,7 +23,11 @@ const router = createBrowserRouter([
   {
     path: "/adminDashboard",
     element: <AdminDashboard />,
-  }
+  },
+  {
+    path: "/admin/job/:jobId/applications",
+    element: <JobApplications />,
+  },
 ])
 
 createRoot(document.getElementById('root')).render(
