@@ -60,7 +60,7 @@ router.get("/update/application", async (req, res) => {
             applicationId: app.id,
             action: "Status Updated",
             role: "bot mimic",
-            updatedBy: decoded.id,
+            updatedBy: "68f111cf6d0bb8231ccc0028",
             comment: "Application status changed to " + nextStatus,
             timestamp: new Date(),
           });
@@ -79,7 +79,7 @@ router.get("/update/application", async (req, res) => {
             applicationId: app.id,
             action: "Status Updated",
             role: "bot mimic",
-            updatedBy: decoded.id,
+            updatedBy: "68f111cf6d0bb8231ccc0028",
             comment: "Application got Rejected",
             timestamp: new Date(),
           });

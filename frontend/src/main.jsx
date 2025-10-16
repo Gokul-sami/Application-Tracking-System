@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import Login from './pages/login.jsx';
 import Signup from './pages/signup.jsx';
+import AdminDashboard from './pages/admin/adminDashboard.jsx';
 
 import {
   createBrowserRouter,
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
     path: "/signup",
     element: <Signup />,
   },
+  {
+    path: "/adminDashboard",
+    element: <AdminDashboard />,
+  }
 ])
 
 createRoot(document.getElementById('root')).render(

@@ -35,7 +35,7 @@ const Login = () => {
         localStorage.setItem("user", user);
 
         // navigate based on role
-        if (user.role === "admin") navigate("/admin");
+        if (user.role === "admin") navigate("/adminDashboard");
         else navigate("/applicant");
       })
       .catch((error) => {
