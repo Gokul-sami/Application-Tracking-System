@@ -1,0 +1,50 @@
+.job-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 10px;
+  flex: 1 1 calc(33% - 20px);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.job-card:hover {
+  transform: translateY(-5px);
+}
+
+.job-card h3 {
+  margin-top: 0;
+  color: #5227FF;
+}
+
+.job-card p {
+  margin: 5px 0;
+}
+
+.job-card button {
+  margin-top: 10px;
+  background-color: #5227FF;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.job-card button:hover {
+  background-color: #3a1dbf;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .job-card {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+@media (max-width: 600px) {
+  .job-card {
+    flex: 1 1 100%;
+  }
+}

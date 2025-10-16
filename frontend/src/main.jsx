@@ -5,6 +5,9 @@ import Login from './pages/login.jsx';
 import Signup from './pages/signup.jsx';
 import AdminDashboard from './pages/admin/adminDashboard.jsx';
 import JobApplications from './pages/admin/jobApplication.jsx';
+import Home from './pages/applicant/home.jsx';
+import Applications from './pages/applicant/applications.jsx';
+import ApplicationHistory from './pages/applicant/applicationHistory.jsx';
 
 import {
   createBrowserRouter,
@@ -21,12 +24,24 @@ const router = createBrowserRouter([
     element: <Signup />,
   },
   {
-    path: "/adminDashboard",
+    path: "/admin/dashboard",
     element: <AdminDashboard />,
   },
   {
     path: "/admin/job/:jobId/applications",
     element: <JobApplications />,
+  },
+  {
+    path: "/applicant/home",
+    element: <Home />,
+  },
+  {
+    path: "/applicant/my-applications",
+    element: <Applications />,
+  },
+  {
+    path: "/applicant/application/:id",
+    element: <ApplicationHistory />,
   },
 ])
 

@@ -81,7 +81,6 @@ router.get("/job/:jobId", async (req, res) => {
 router.get("/job/:jobId/applications", async (req, res) => {
   try {
     const { jobId } = req.params;
-    console.log(jobId);
 
     // Check if job exists
     const applications = await Application.find({ jobId })
