@@ -10,10 +10,20 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [user, setUser] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    try {
+      const userData = localStorage.getItem("username");
+      console.log("user:"+userData);
+      if (userData) {
+        setUser(userData);
+      }
+    } catch (err) {
+      console.error("Error parsing user data:", err);
+    }
     fetchJobs();
   }, []);
 
@@ -49,9 +59,12 @@ const Home = () => {
     <div className="applicant-home">
       <header className="home-header">
         <div className="header-top">
-          <h1>Welcome Back!</h1>
+          <h1>Welcome Back {user}</h1>
           <button className="my-applications-btn" onClick={() => navigate("/applicant/my-applications")}>
             My Applications
+          </button>
+          <button className="logout-btn" onClick={() => navigate("/")}>
+            Logout
           </button>
         </div>
         <p>Explore jobs and apply to the ones that fit you</p>
