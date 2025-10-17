@@ -52,7 +52,6 @@ router.post("/job/apply/:jobId", async (req, res) => {
     const isAdmin = job.jobType === "Non-technical"
     let role = isAdmin ? "admin" : "bot mimic"
 
-    // Create new application
     const application = new Application({
       jobId,
       applicantId: user.id,

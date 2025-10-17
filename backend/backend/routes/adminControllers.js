@@ -6,7 +6,6 @@ import Log from "../models/Log.js";
 
 const router = express.Router();
 
-// get admin from token
 function getAdminFromToken(req) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: "No token provided" });
@@ -43,12 +42,10 @@ router.post("/job/create", async (req, res) => {
   try {
     const decoded = getAdminFromToken(req);
 
-    // Verify admin
     if (decoded.role !== "admin") {
       return res.status(403).json({ message: "Access denied. Admins only." });
     }
 
-    // Create job
     const { title, jobType, description, location, salary } = req.body;
     const newJob = new Job({ title, jobType, description, location, salary, createdBy: decoded.id });
     await newJob.save();
@@ -82,7 +79,6 @@ router.get("/job/:jobId/applications", async (req, res) => {
   try {
     const { jobId } = req.params;
 
-    // Check if job exists
     const applications = await Application.find({ jobId })
       .populate("applicantId", "name email")
       .populate("jobId", "title location jobType")
@@ -110,22 +106,18 @@ router.put("/applications/:id/status", async (req, res) => {
 
     const decoded = getAdminFromToken(req);
 
-    // Verify admin
     if (decoded.role !== "admin") {
       return res.status(403).json({ message: "Access denied. Admins only." });
     }
 
-    // Validate allowed statuses
     const allowedStatuses = ["Applied", "Under Review", "Interview", "Offered", "Rejected"];
     if (!allowedStatuses.includes(status)) {
       return res.status(400).json({ message: "Invalid status value" });
     }
 
-    // Find application
     const application = await Application.findById(id);
     if (!application) return res.status(404).json({ message: "Application not found" });
 
-    // Update status
     application.status = status;
 
     // Add entry to history

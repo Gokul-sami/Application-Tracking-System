@@ -13,6 +13,7 @@ const ApplicationHistory = () => {
     fetchApplication();
   }, [id]);
 
+//   fetch application details
   const fetchApplication = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -45,6 +46,7 @@ const ApplicationHistory = () => {
           Back
         </button>
         <h2>Application History</h2>
+        .
       </header>
 
       <div className="application-details">

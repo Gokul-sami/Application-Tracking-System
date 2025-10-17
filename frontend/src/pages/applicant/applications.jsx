@@ -36,6 +36,7 @@ const Applications = () => {
           Back
         </button>
         <h2>My Applications</h2>
+        .
       </header>
 
       {applications.length === 0 ? (

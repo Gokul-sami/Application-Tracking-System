@@ -38,6 +38,7 @@ const JobApplications = () => {
     }
   };
 
+//   status update
   const handleStatusUpdate = async (id, newStatus) => {
     const comment = commentMap[id]?.trim();
 
@@ -73,6 +74,7 @@ const JobApplications = () => {
           Back
         </button>
         <h2>{job?.title || "Job"} Applications</h2>
+        .
       </header>
 
       {applications.length === 0 ? (

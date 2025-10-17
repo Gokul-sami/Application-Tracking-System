@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./styles/Signup.css";
+import "../styles/Signup.css";
 import Prism from "../components/Prism";
 
 const Signup = () => {

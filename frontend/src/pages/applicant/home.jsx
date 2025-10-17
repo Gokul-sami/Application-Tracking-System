@@ -47,7 +47,6 @@ const Home = () => {
 
   return (
     <div className="applicant-home">
-      {/* Header */}
       <header className="home-header">
         <div className="header-top">
           <h1>Welcome Back!</h1>
@@ -72,7 +71,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Application Form Modal */}
+      {/* Application Form */}
       {showForm && selectedJob && (
         <ApplicationForm
           job={selectedJob}
