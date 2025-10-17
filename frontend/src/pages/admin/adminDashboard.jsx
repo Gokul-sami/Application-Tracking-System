@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../styles/AdminDashboard.css";
+import "../styles/adminDashboard.css";
 import JobForm from "../../components/JobForm";
 import { useNavigate } from "react-router-dom";
 
