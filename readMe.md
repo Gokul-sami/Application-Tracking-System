@@ -61,6 +61,3 @@ Deploy `dist/` folder to Netlify, Vercel, or any static hosting.
 - Open frontend in browser
 - Applicants browse jobs and apply
 - Admins manage jobs and applications
-
-## License
-MIT License © 2025 Gokul Sami
