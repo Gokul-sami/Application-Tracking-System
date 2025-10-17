@@ -3,6 +3,8 @@ import cors from "cors";
 const allowedOrigins = [
   "http://localhost:5173",
   "https://hybrid-application-tracking-system-six.vercel.app/",
+  "https://hybrid-application-tracking-git-bdbf87-gokuls-projects-36b9795c.vercel.app/",
+  "https://hybrid-application-tracking-system-6-q726q5ipt.vercel.app/",
 ];
 
 export const corsOptions = {
