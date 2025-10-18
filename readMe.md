@@ -1,4 +1,4 @@
-# Hybrid Application Tracking System (HATS)
+# Application Tracking System (ATS)
 
 A full-stack job application tracking system built with React (frontend) and Express.js (backend), using MongoDB as the database.
 
