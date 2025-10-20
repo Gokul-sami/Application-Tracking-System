@@ -3,7 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import JobCard from "../../components/JobCard";
 import ApplicationForm from "../../components/ApplicationForm";
-import "../styles/applicantHome.css";
 
 const Home = () => {
   const [jobs, setJobs] = useState([]);
@@ -17,10 +16,7 @@ const Home = () => {
   useEffect(() => {
     try {
       const userData = localStorage.getItem("username");
-      console.log("user:"+userData);
-      if (userData) {
-        setUser(userData);
-      }
+      if (userData) setUser(userData);
     } catch (err) {
       console.error("Error parsing user data:", err);
     }
@@ -31,8 +27,6 @@ const Home = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-
-      // Get all jobs
       const jobsRes = await axios.get(`${import.meta.env.VITE_BACKENDURL}/applicant/job/all`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -53,44 +47,81 @@ const Home = () => {
     setShowForm(false);
   };
 
-  if (loading) return <div className="loading">Loading...</div>;
+  if (loading)
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
 
   return (
-    <div className="applicant-home">
-      <header className="home-header">
-        <div className="header-top">
-          <h1>Welcome Back {user}</h1>
-          <button className="my-applications-btn" onClick={() => navigate("/applicant/my-applications")}>
-            My Applications
+    <div className="container py-4">
+      {/* Header Section */}
+      <header className="mb-4 text-center">
+        <h1 className="fw-bold mb-3">Welcome Back, {user}</h1>
+        <p className="text-muted mb-4">Explore jobs and apply to the ones that fit you best.</p>
+        <div className="d-flex justify-content-center gap-3">
+          <button
+            className="btn btn-outline-primary"
+            onClick={() => navigate("/applicant/my-applications")}
+          >
+            <i className="bi bi-briefcase-fill me-2"></i>My Applications
           </button>
-          <button className="logout-btn" onClick={() => navigate("/")}>
-            Logout
+          <button
+            className="btn btn-outline-danger"
+            onClick={() => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("username");
+              navigate("/");
+            }}
+          >
+            <i className="bi bi-box-arrow-right me-2"></i>Logout
           </button>
         </div>
-        <p>Explore jobs and apply to the ones that fit you</p>
       </header>
 
       {/* Jobs Section */}
-      <section className="jobs-section">
-        <h2>Available Jobs</h2>
-        <div className="jobs-list">
-          {jobs.length === 0 ? (
-            <p>No jobs available currently.</p>
-          ) : (
-            jobs.map((job) => (
-              <JobCard key={job._id} job={job} onApplyClick={handleApplyClick} />
-            ))
-          )}
-        </div>
+      <section>
+        <h2 className="fw-semibold mb-3">Available Jobs</h2>
+        {jobs.length === 0 ? (
+          <div className="text-center text-muted py-5 border rounded bg-light">
+            No jobs available currently.
+          </div>
+        ) : (
+          <div className="row g-4">
+            {jobs.map((job) => (
+              <div className="col-md-6 col-lg-4" key={job._id}>
+                <JobCard job={job} onApplyClick={handleApplyClick} />
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
-      {/* Application Form */}
+      {/* Application Form Modal */}
       {showForm && selectedJob && (
-        <ApplicationForm
-          job={selectedJob}
-          onClose={() => setShowForm(false)}
-          onApplied={handleApplied}
-        />
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          role="dialog"
+          style={{ background: "rgba(0,0,0,0.4)" }}
+          onClick={() => setShowForm(false)}
+        >
+          <div
+            className="modal-dialog modal-dialog-centered modal-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+              <div className="modal-body">
+                <ApplicationForm
+                  job={selectedJob}
+                  onClose={() => setShowForm(false)}
+                  onApplied={handleApplied}
+                />
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

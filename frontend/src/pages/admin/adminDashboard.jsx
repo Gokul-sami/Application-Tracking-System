@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../styles/adminDashboard.css";
 import JobForm from "../../components/JobForm";
 import { useNavigate } from "react-router-dom";
 
@@ -17,13 +16,15 @@ const AdminDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const jobsRes = await axios.get(`${import.meta.env.VITE_BACKENDURL}/admin/job/all`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const jobsRes = await axios.get(
+        `${import.meta.env.VITE_BACKENDURL}/admin/job/all`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-      const appsRes = await axios.get(`${import.meta.env.VITE_BACKENDURL}/admin/applications/count`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const appsRes = await axios.get(
+        `${import.meta.env.VITE_BACKENDURL}/admin/applications/count`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
       setJobs(jobsRes.data || []);
       setApplicationsCount(appsRes.data.totalApplications || 0);
@@ -37,76 +38,113 @@ const AdminDashboard = () => {
     setShowForm(false);
   };
 
-  // job applications page
   const handleViewApplications = (jobId) => {
     navigate(`/admin/job/${jobId}/applications`);
   };
 
-  return (
-    <div className="admin-dashboard">
-      <header className="admin-header">
-        <h2>Admin Dashboard</h2>
-        <button onClick={() => setShowForm(true)} className="create-job-btn">
-          Create Job
-        </button>
-      </header>
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = showForm ? "hidden" : "auto";
+  }, [showForm]);
 
-      <div className="admin-analytics">
-        <div className="stat-card">
-          <h3>{jobs.length}</h3>
-          <p>Total Jobs</p>
+  return (
+    <div className="container py-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="fw-bold">Admin Dashboard</h2>
+        <button
+          className="btn btn-primary"
+          onClick={() => setShowForm(true)}
+        >
+          <i className="bi bi-plus-circle me-2"></i>Create Job
+        </button>
+      </div>
+
+      <div className="row mb-4">
+        <div className="col-md-6 mb-3">
+          <div className="card text-center shadow-sm">
+            <div className="card-body">
+              <h3 className="fw-bold">{jobs.length}</h3>
+              <p className="text-muted mb-0">Total Jobs</p>
+            </div>
+          </div>
         </div>
-        <div className="stat-card">
-          <h3>{applicationsCount}</h3>
-          <p>Total Applications</p>
+        <div className="col-md-6 mb-3">
+          <div className="card text-center shadow-sm">
+            <div className="card-body">
+              <h3 className="fw-bold">{applicationsCount}</h3>
+              <p className="text-muted mb-0">Total Applications</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Jobs List Section */}
-      <section className="jobs-section">
-        <h3>Jobs Overview</h3>
-        {jobs.length === 0 ? (
-          <p>No jobs created yet.</p>
-        ) : (
-          <table className="jobs-table">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Job Type</th>
-                <th>Location</th>
-                <th>Salary</th>
-                <th>Created on</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {jobs.map((job) => (
-                <tr key={job._id}>
-                  <td>{job.title}</td>
-                  <td>{job.jobType}</td>
-                  <td>{job.location}</td>
-                  <td>{job.salary ? `₹${job.salary}` : "N/A"}</td>
-                  <td>{new Date(job.createdAt).toLocaleDateString()}</td>
-                  <td>
-                    <button
-                      className="view-btn"
-                      onClick={() => handleViewApplications(job._id)}
-                    >
-                      view applications  &rarr;
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </section>
+      <div className="card shadow-sm">
+        <div className="card-body">
+          <h4 className="fw-semibold mb-3">Jobs Overview</h4>
 
-      {/* create job */}
+          {jobs.length === 0 ? (
+            <p className="text-muted text-center">No jobs created yet.</p>
+          ) : (
+            <div className="table-responsive">
+              <table className="table table-hover align-middle">
+                <thead className="table-light">
+                  <tr>
+                    <th>Title</th>
+                    <th>Job Type</th>
+                    <th>Location</th>
+                    <th>Salary</th>
+                    <th>Created On</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {jobs.map((job) => (
+                    <tr key={job._id}>
+                      <td>{job.title}</td>
+                      <td>{job.jobType}</td>
+                      <td>{job.location}</td>
+                      <td>{job.salary ? `₹${job.salary}` : "N/A"}</td>
+                      <td>{new Date(job.createdAt).toLocaleDateString()}</td>
+                      <td>
+                        <button
+                          className="btn btn-link text-primary p-0"
+                          onClick={() => handleViewApplications(job._id)}
+                        >
+                          View Applications &rarr;
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Centered Modal */}
       {showForm && (
-        <div className="modal-overlay" onClick={() => setShowForm(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <JobForm onClose={() => setShowForm(false)} onJobCreated={handleJobCreated} />
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+          style={{
+            backgroundColor: "rgba(0,0,0,0.6)",
+            zIndex: 1050,
+          }}
+          onClick={() => setShowForm(false)}
+        >
+          <div
+            className="bg-white rounded-4 shadow-lg p-4"
+            style={{
+              width: "60%",
+              maxWidth: "850px",
+              minHeight: "auto",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <JobForm
+              onClose={() => setShowForm(false)}
+              onJobCreated={handleJobCreated}
+            />
           </div>
         </div>
       )}

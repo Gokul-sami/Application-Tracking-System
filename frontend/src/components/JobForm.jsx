@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./JobForm.css";
 
 const JobForm = ({ onClose, onJobCreated }) => {
   const [formData, setFormData] = useState({
@@ -43,35 +42,97 @@ const JobForm = ({ onClose, onJobCreated }) => {
   };
 
   return (
-    <div className="job-form-container">
-      <h3>Create a New Job</h3>
-      {error && <p className="error-text">{error}</p>}
+    <div className="container-fluid">
+      <h4 className="fw-bold mb-4 text-center border-bottom pb-2">
+        Create a New Job
+      </h4>
+
+      {error && <div className="alert alert-danger">{error}</div>}
 
       <form onSubmit={handleSubmit}>
-        <label>Title</label>
-        <input type="text" name="title" onChange={handleChange} required />
+        <div className="row g-4">
+          {/* Left Column */}
+          <div className="col-md-6">
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Title</label>
+              <input
+                type="text"
+                className="form-control border-3 rounded-3"
+                style={{ boxShadow: "none", outline: "none" }}
+                name="title"
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-        <label>Job Type</label>
-        <select name="jobType" onChange={handleChange} value={formData.jobType}>
-          <option value="Technical">Technical</option>
-          <option value="Non-technical">Non-technical</option>
-        </select>
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Job Type</label>
+              <select
+                name="jobType"
+                className="form-control border-3 rounded-3"
+                onChange={handleChange}
+                value={formData.jobType}
+              >
+                <option value="Technical">Technical</option>
+                <option value="Non-technical">Non-technical</option>
+              </select>
+            </div>
 
-        <label>Description</label>
-        <textarea name="description" onChange={handleChange} required></textarea>
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Location</label>
+              <input
+                type="text"
+                className="form-control border-3 rounded-3"
+                style={{ boxShadow: "none", outline: "none" }}
+                name="location"
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
 
-        <label>Location</label>
-        <input type="text" name="location" onChange={handleChange} required />
+          {/* Right Column */}
+          <div className="col-md-6">
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Salary (₹)</label>
+              <input
+                type="number"
+                className="form-control border-3 rounded-3"
+                style={{ boxShadow: "none", outline: "none" }}
+                name="salary"
+                onChange={handleChange}
+              />
+            </div>
 
-        <label>Salary (₹)</label>
-        <input type="number" name="salary" onChange={handleChange} />
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Description</label>
+              <textarea
+                name="description"
+                className="form-control border-3 rounded-3"
+                style={{ boxShadow: "none", outline: "none" }}
+                rows="5"
+                onChange={handleChange}
+                required
+              ></textarea>
+            </div>
+          </div>
+        </div>
 
-        <div className="form-buttons">
-          <button type="submit" disabled={loading}>
-            {loading ? "Creating..." : "Create Job"}
-          </button>
-          <button type="button" onClick={onClose} className="cancel-btn">
+        {/* Buttons */}
+        <div className="d-flex justify-content-end gap-2 mt-4 border-top pt-3">
+          <button
+            type="button"
+            className="btn btn-outline-secondary px-4"
+            onClick={onClose}
+          >
             Cancel
+          </button>
+          <button
+            type="submit"
+            className="btn btn-primary px-4"
+            disabled={loading}
+          >
+            {loading ? "Creating..." : "Create Job"}
           </button>
         </div>
       </form>

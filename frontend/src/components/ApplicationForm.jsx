@@ -42,13 +42,15 @@ const ApplicationForm = ({ job, onClose, onApplied }) => {
             onChange={(e) => setResumeLink(e.target.value)}
             required
           />
-          <button type="submit" disabled={loading}>
+          <div className="d-flex justify-content-center gap-3 mt-3">
+          <button className="w-50" type="submit" disabled={loading}>
             {loading ? "Applying..." : "Apply"}
           </button>
+          <button className="w-50" onClick={onClose}>
+            Cancel
+          </button>
+          </div>
         </form>
-        <button className="close-btn" onClick={onClose}>
-          Cancel
-        </button>
       </div>
     </div>
   );

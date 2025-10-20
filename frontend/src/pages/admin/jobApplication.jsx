@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import "../styles/jobApplication.css";
 
 const JobApplications = () => {
   const { jobId } = useParams();
@@ -12,40 +11,55 @@ const JobApplications = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchApplications();
+    const cached = sessionStorage.getItem(`jobApplications-${jobId}`);
+    if (cached) {
+      const { job, applications } = JSON.parse(cached);
+      setJob(job);
+      setApplications(applications);
+      setLoading(false);
+      // ✅ Background refresh (non-blocking)
+      fetchApplications(true);
+    } else {
+      fetchApplications();
+    }
   }, [jobId]);
 
-  const fetchApplications = async () => {
+  const fetchApplications = async (isBackground = false) => {
+    if (!isBackground) setLoading(true);
     try {
       const token = localStorage.getItem("token");
 
-      // Fetch job details
-      const jobRes = await axios.get(`${import.meta.env.VITE_BACKENDURL}/admin/job/${jobId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setJob(jobRes.data);
+      // ⚡ Fetch both job & applications in parallel
+      const [jobRes, appsRes] = await Promise.all([
+        axios.get(`${import.meta.env.VITE_BACKENDURL}/admin/job/${jobId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        axios.get(
+          `${import.meta.env.VITE_BACKENDURL}/admin/job/${jobId}/applications`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        ),
+      ]);
 
-      // Fetch applications
-      const appsRes = await axios.get(`${import.meta.env.VITE_BACKENDURL}/admin/job/${jobId}/applications`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const jobData = jobRes.data;
+      const appData = appsRes.data.applications || [];
 
-      setApplications(appsRes.data.applications || []);
+      setJob(jobData);
+      setApplications(appData);
+
+      // ✅ Cache results
+      sessionStorage.setItem(
+        `jobApplications-${jobId}`,
+        JSON.stringify({ job: jobData, applications: appData })
+      );
     } catch (err) {
       console.error("Error fetching applications:", err);
     } finally {
-      setLoading(false);
+      if (!isBackground) setLoading(false);
     }
   };
 
-//   status update
   const handleStatusUpdate = async (id, newStatus) => {
     const comment = commentMap[id]?.trim();
-
-    if (job?.jobType === "Non-technical" && (!comment || comment.length === 0)) {
-      alert("Please add a comment before updating the status.");
-      return;
-    }
 
     try {
       const token = localStorage.getItem("token");
@@ -54,8 +68,27 @@ const JobApplications = () => {
         { status: newStatus, comment },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
+      // ✅ Update local state immediately (no full refetch)
+      setApplications((prev) =>
+        prev.map((app) =>
+          app._id === id ? { ...app, status: newStatus } : app
+        )
+      );
+
       setCommentMap((prev) => ({ ...prev, [id]: "" }));
-      fetchApplications();
+
+      // ✅ Refresh cache
+      const cached = JSON.parse(sessionStorage.getItem(`jobApplications-${jobId}`));
+      if (cached) {
+        const updated = {
+          ...cached,
+          applications: cached.applications.map((a) =>
+            a._id === id ? { ...a, status: newStatus } : a
+          ),
+        };
+        sessionStorage.setItem(`jobApplications-${jobId}`, JSON.stringify(updated));
+      }
     } catch (err) {
       console.error("Error updating status:", err);
     }
@@ -65,74 +98,83 @@ const JobApplications = () => {
     setCommentMap((prev) => ({ ...prev, [id]: value }));
   };
 
-  if (loading) return <div className="loading">Loading...</div>;
+  if (loading)
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
 
   return (
-    <div className="applications-page">
-      <header className="applications-header">
-        <button onClick={() => navigate(-1)} className="back-btn">
-          Back
+    <div className="container py-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <button className="btn btn-outline-secondary" onClick={() => navigate(-1)}>
+          <i className="bi bi-arrow-left me-1"></i>Back
         </button>
-        <h2>{job?.title || "Job"} Applications</h2>
-        .
-      </header>
+        <h3 className="fw-bold mb-0">{job?.title || "Job"} Applications</h3>
+        <button className="btn btn-outline-primary" onClick={() => fetchApplications()}>
+          <i className="bi bi-arrow-clockwise me-1"></i>Refresh
+        </button>
+      </div>
 
       {applications.length === 0 ? (
-        <p className="no-apps">No applications for this job yet.</p>
+        <p className="text-muted text-center">No applications for this job yet.</p>
       ) : (
-        <div className="applications-list">
+        <div className="row">
           {applications.map((app) => (
-            <div key={app._id} className="application-card">
-              <div className="applicant-info">
-                <p><strong>Applicant Name:</strong> {app.name || app.applicantId?.name || "N/A"}</p>
-                <p><strong>Email:</strong> {app.email || app.applicantId?.email || "N/A"}</p>
-                <p>
-                  <strong>Resume:</strong>{" "}
+            <div key={app._id} className="col-md-6 mb-4">
+              <div className="card shadow-sm">
+                <div className="card-body">
+                  <h5 className="fw-semibold">{app.name || app.applicantId?.name}</h5>
+                  <p className="mb-1 text-muted">{app.email || app.applicantId?.email}</p>
                   <a href={app.resumeLink} target="_blank" rel="noopener noreferrer">
                     View Resume
                   </a>
-                </p>
-                <p><strong>Status:</strong> {app.status}</p>
-              </div>
+                  <p className="mt-2">
+                    <strong>Status:</strong> {app.status}
+                  </p>
 
-              {job?.jobType === "Non-technical" && (
-                <div className="status-update">
-                  <label>Update Status:</label>
-                  <select
-                    value={app.status}
-                    onChange={(e) => handleStatusUpdate(app._id, e.target.value)}
-                  >
-                    <option value="Applied">Applied</option>
-                    <option value="Under Review">Under Review</option>
-                    <option value="Interview">Interview</option>
-                    <option value="Offered">Offered</option>
-                    <option value="Rejected">Rejected</option>
-                  </select>
+                  <div className="mt-3">
+                    <label className="form-label fw-semibold">Update Status</label>
+                    <select
+                      className="form-select mb-2"
+                      value={app.status}
+                      onChange={(e) => handleStatusUpdate(app._id, e.target.value)}
+                    >
+                      <option value="Applied">Applied</option>
+                      <option value="Under Review">Under Review</option>
+                      <option value="Interview">Interview</option>
+                      <option value="Offered">Offered</option>
+                      <option value="Rejected">Rejected</option>
+                    </select>
+                    <textarea
+                      className="form-control"
+                      placeholder="Add a comment..."
+                      value={commentMap[app._id] || ""}
+                      onChange={(e) => handleCommentChange(app._id, e.target.value)}
+                    />
+                  </div>
 
-                  <textarea
-                    placeholder="Add a comment..."
-                    value={commentMap[app._id] || ""}
-                    onChange={(e) => handleCommentChange(app._id, e.target.value)}
-                  />
+                  <div className="mt-3">
+                    <h6>History</h6>
+                    {app.history?.length === 0 ? (
+                      <p className="text-muted">No history yet.</p>
+                    ) : (
+                      <ul className="list-group">
+                        {app.history.map((h, i) => (
+                          <li key={i} className="list-group-item">
+                            <strong>{h.status}</strong> — {h.role} (
+                            {new Date(h.timestamp).toLocaleDateString()})
+                            <br />
+                            <small className="text-muted">{h.comment}</small>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </div>
-              )}
-
-              <div className="history">
-                <h4>History</h4>
-                {app.history?.length === 0 ? (
-                  <p>No history yet.</p>
-                ) : (
-                  <ul>
-                    {app.history.map((h, i) => (
-                      <li key={i}>
-                        <span className="status">{h.status}</span> — {h.role} (
-                        {new Date(h.timestamp).toLocaleDateString()})
-                        <br />
-                        <small>{h.comment}</small>
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </div>
             </div>
           ))}

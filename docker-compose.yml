@@ -20,3 +20,6 @@ services:
     env_file:
       - ./frontend/.env
     command: ["npm", "run", "dev", "--", "--host"]
+    volumes:
+    - ./frontend:/app:cached
+    - /app/node_modules
