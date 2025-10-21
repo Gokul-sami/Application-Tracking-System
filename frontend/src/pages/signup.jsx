@@ -50,13 +50,13 @@ const Signup = () => {
   return (
     <div className="signup-container">
       <Prism
-        animationType="rotate"
+        animationType="hover"
         timeScale={0.6}
         height={3.5}
         baseWidth={5.5}
         scale={3}
         hueShift={0}
-        colorFrequency={1}
+        colorFrequency={0.8}
         noise={0}
         glow={1}
       />

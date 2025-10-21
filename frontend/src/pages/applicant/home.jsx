@@ -97,7 +97,7 @@ const Home = () => {
         ) : (
           <div className="row g-4">
             {jobs.map((job) => (
-              <div className="col-md-6 col-lg-4" key={job._id}>
+              <div className="col-md-6 col-lg-4 cursor-target" key={job._id}>
                 <JobCard job={job} onApplyClick={handleApplyClick} />
               </div>
             ))}
