@@ -8,7 +8,7 @@ const JobCard = ({ job, onApplyClick }) => {
       <p><strong>Type:</strong> {job.jobType}</p>
       <p><strong>Location:</strong> {job.location}</p>
       <p><strong>Salary:</strong> {job.salary ? `₹${job.salary}` : "N/A"}</p>
-      <button onClick={() => onApplyClick(job)}>Apply</button>
+      <button className="cursor-target" onClick={() => onApplyClick(job)}>Apply</button>
     </div>
   );
 };

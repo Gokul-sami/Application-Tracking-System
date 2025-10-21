@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./styles/signup.css";
 import Prism from "../components/Prism";
+import Orb from "../components/Orb";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -59,6 +60,13 @@ const Signup = () => {
         noise={0}
         glow={1}
       />
+
+      {/* <Orb
+        hoverIntensity={2}
+        rotateOnHover={true}
+        hue={0}
+        forceHoverState={false}
+      /> */}
 
       <div className="signup-card">
         <h2>Create Account</h2>

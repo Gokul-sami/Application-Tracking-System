@@ -36,6 +36,7 @@ const ApplicationForm = ({ job, onClose, onApplied }) => {
         <form onSubmit={handleSubmit}>
           <label>Resume Link</label>
           <input
+            className="cursor-target"
             type="url"
             placeholder="Paste your resume link"
             value={resumeLink}
@@ -43,10 +44,10 @@ const ApplicationForm = ({ job, onClose, onApplied }) => {
             required
           />
           <div className="d-flex justify-content-center gap-3 mt-3">
-          <button className="w-50" type="submit" disabled={loading}>
+          <button className="w-50 cursor-target" type="submit" disabled={loading}>
             {loading ? "Applying..." : "Apply"}
           </button>
-          <button className="w-50" onClick={onClose}>
+          <button className="w-50 cursor-target" onClick={onClose}>
             Cancel
           </button>
           </div>

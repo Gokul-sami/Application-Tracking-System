@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./styles/login.css";
 import Prism from "../components/Prism";
+import Orb from "../components/Orb";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <Prism
+      {/* <Prism
         animationType="rotate"
         timeScale={0.6}
         height={3.5}
@@ -59,6 +60,13 @@ const Login = () => {
         colorFrequency={1}
         noise={0}
         glow={1}
+      /> */}
+
+      <Orb
+        hoverIntensity={0.5}
+        rotateOnHover={true}
+        hue={0}
+        forceHoverState={false}
       />
 
       <div className="login-card">

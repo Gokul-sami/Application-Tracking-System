@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import TargetCursor from "../../components/TargetCursor.jsx";
 
 const JobApplications = () => {
   const { jobId } = useParams();
@@ -109,12 +110,17 @@ const JobApplications = () => {
 
   return (
     <div className="container py-4">
+      <TargetCursor 
+        spinDuration={2}
+        hideDefaultCursor={true}
+      />
+
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <button className="btn btn-outline-secondary" onClick={() => navigate(-1)}>
+        <button className="btn btn-outline-secondary cursor-target" onClick={() => navigate(-1)}>
           <i className="bi bi-arrow-left me-1"></i>Back
         </button>
         <h3 className="fw-bold mb-0">{job?.title || "Job"} Applications</h3>
-        <button className="btn btn-outline-primary" onClick={() => fetchApplications()}>
+        <button className="btn btn-outline-primary cursor-target" onClick={() => fetchApplications()}>
           <i className="bi bi-arrow-clockwise me-1"></i>Refresh
         </button>
       </div>
@@ -126,7 +132,7 @@ const JobApplications = () => {
           {applications.map((app) => (
             <div key={app._id} className="col-md-6 mb-4">
               <div className="card shadow-sm">
-                <div className="card-body">
+                <div className="card-body cursor-target">
                   <h5 className="fw-semibold">{app.name || app.applicantId?.name}</h5>
                   <p className="mb-1 text-muted">{app.email || app.applicantId?.email}</p>
                   <a href={app.resumeLink} target="_blank" rel="noopener noreferrer">
@@ -139,7 +145,7 @@ const JobApplications = () => {
                   <div className="mt-3">
                     <label className="form-label fw-semibold">Update Status</label>
                     <select
-                      className="form-select mb-2"
+                      className="form-select mb-2 cursor-target"
                       value={app.status}
                       onChange={(e) => handleStatusUpdate(app._id, e.target.value)}
                     >
@@ -150,7 +156,7 @@ const JobApplications = () => {
                       <option value="Rejected">Rejected</option>
                     </select>
                     <textarea
-                      className="form-control"
+                      className="form-control cursor-target"
                       placeholder="Add a comment..."
                       value={commentMap[app._id] || ""}
                       onChange={(e) => handleCommentChange(app._id, e.target.value)}

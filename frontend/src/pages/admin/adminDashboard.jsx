@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import JobForm from "../../components/JobForm";
 import { useNavigate } from "react-router-dom";
+import TargetCursor from "../../components/TargetCursor.jsx";
 
 const AdminDashboard = () => {
   const [jobs, setJobs] = useState([]);
@@ -49,18 +50,30 @@ const AdminDashboard = () => {
 
   return (
     <div className="container py-4">
+      <TargetCursor 
+        spinDuration={2}
+        hideDefaultCursor={true}
+      />
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold">Admin Dashboard</h2>
-        <button
-          className="btn btn-primary"
-          onClick={() => setShowForm(true)}
-        >
-          <i className="bi bi-plus-circle me-2"></i>Create Job
-        </button>
+        <div className="d-flex gap-2">
+          <button
+            className="btn btn-primary cursor-target"
+            onClick={() => setShowForm(true)}
+          >
+            <i className="bi bi-plus-circle me-2"></i>Create Job
+          </button>
+          <button
+            className="btn btn-danger cursor-target"
+            onClick={() => navigate("/")}
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       <div className="row mb-4">
-        <div className="col-md-6 mb-3">
+        <div className="col-md-6 mb-3 cursor-target">
           <div className="card text-center shadow-sm">
             <div className="card-body">
               <h3 className="fw-bold">{jobs.length}</h3>
@@ -68,7 +81,7 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="col-md-6 mb-3">
+        <div className="col-md-6 mb-3 cursor-target">
           <div className="card text-center shadow-sm">
             <div className="card-body">
               <h3 className="fw-bold">{applicationsCount}</h3>
@@ -107,7 +120,7 @@ const AdminDashboard = () => {
                       <td>{new Date(job.createdAt).toLocaleDateString()}</td>
                       <td>
                         <button
-                          className="btn btn-link text-primary p-0"
+                          className="btn btn-link text-primary p-0 cursor-target"
                           onClick={() => handleViewApplications(job._id)}
                         >
                           View Applications &rarr;

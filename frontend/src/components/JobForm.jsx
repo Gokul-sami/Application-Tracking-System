@@ -57,7 +57,7 @@ const JobForm = ({ onClose, onJobCreated }) => {
               <label className="form-label fw-semibold">Title</label>
               <input
                 type="text"
-                className="form-control border-3 rounded-3"
+                className="form-control border-3 rounded-3 cursor-target"
                 style={{ boxShadow: "none", outline: "none" }}
                 name="title"
                 onChange={handleChange}
@@ -69,7 +69,7 @@ const JobForm = ({ onClose, onJobCreated }) => {
               <label className="form-label fw-semibold">Job Type</label>
               <select
                 name="jobType"
-                className="form-control border-3 rounded-3"
+                className="form-control border-3 rounded-3 cursor-target"
                 onChange={handleChange}
                 value={formData.jobType}
               >
@@ -82,7 +82,7 @@ const JobForm = ({ onClose, onJobCreated }) => {
               <label className="form-label fw-semibold">Location</label>
               <input
                 type="text"
-                className="form-control border-3 rounded-3"
+                className="form-control border-3 rounded-3 cursor-target"
                 style={{ boxShadow: "none", outline: "none" }}
                 name="location"
                 onChange={handleChange}
@@ -97,7 +97,7 @@ const JobForm = ({ onClose, onJobCreated }) => {
               <label className="form-label fw-semibold">Salary (₹)</label>
               <input
                 type="number"
-                className="form-control border-3 rounded-3"
+                className="form-control border-3 rounded-3 cursor-target"
                 style={{ boxShadow: "none", outline: "none" }}
                 name="salary"
                 onChange={handleChange}
@@ -108,7 +108,7 @@ const JobForm = ({ onClose, onJobCreated }) => {
               <label className="form-label fw-semibold">Description</label>
               <textarea
                 name="description"
-                className="form-control border-3 rounded-3"
+                className="form-control border-3 rounded-3 cursor-target"
                 style={{ boxShadow: "none", outline: "none" }}
                 rows="5"
                 onChange={handleChange}
@@ -122,14 +122,14 @@ const JobForm = ({ onClose, onJobCreated }) => {
         <div className="d-flex justify-content-end gap-2 mt-4 border-top pt-3">
           <button
             type="button"
-            className="btn btn-outline-secondary px-4"
+            className="btn btn-outline-secondary px-4 cursor-target"
             onClick={onClose}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="btn btn-primary px-4"
+            className="btn btn-primary px-4 cursor-target"
             disabled={loading}
           >
             {loading ? "Creating..." : "Create Job"}

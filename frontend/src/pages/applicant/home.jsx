@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import JobCard from "../../components/JobCard";
 import ApplicationForm from "../../components/ApplicationForm";
+import TargetCursor from "../../components/TargetCursor";
 
 const Home = () => {
   const [jobs, setJobs] = useState([]);
@@ -58,19 +59,23 @@ const Home = () => {
 
   return (
     <div className="container py-4">
+      <TargetCursor 
+        spinDuration={2}
+        hideDefaultCursor={true}
+      />
       {/* Header Section */}
       <header className="mb-4 text-center">
         <h1 className="fw-bold mb-3">Welcome Back, {user}</h1>
         <p className="text-muted mb-4">Explore jobs and apply to the ones that fit you best.</p>
         <div className="d-flex justify-content-center gap-3">
           <button
-            className="btn btn-outline-primary"
+            className="btn btn-outline-primary cursor-target"
             onClick={() => navigate("/applicant/my-applications")}
           >
             <i className="bi bi-briefcase-fill me-2"></i>My Applications
           </button>
           <button
-            className="btn btn-outline-danger"
+            className="btn btn-outline-danger cursor-target"
             onClick={() => {
               localStorage.removeItem("token");
               localStorage.removeItem("username");
