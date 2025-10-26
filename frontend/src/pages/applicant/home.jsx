@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import JobCard from "../../components/JobCard";
 import ApplicationForm from "../../components/ApplicationForm";
 import TargetCursor from "../../components/TargetCursor";
+import ElectricBorder from "../../components/ElectricBorder";
 
 const Home = () => {
   const [jobs, setJobs] = useState([]);
@@ -98,7 +99,15 @@ const Home = () => {
           <div className="row g-4">
             {jobs.map((job) => (
               <div className="col-md-6 col-lg-4 cursor-target" key={job._id}>
+                {/* <ElectricBorder
+                  color="#7df9ff"
+                  speed={1}
+                  chaos={0.5}
+                  thickness={2}
+                  style={{ borderRadius: 16 }}
+                > */}
                 <JobCard job={job} onApplyClick={handleApplyClick} />
+                {/* </ElectricBorder> */}
               </div>
             ))}
           </div>

@@ -6,7 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #f9f9ff, #eef1ff);
+  background: linear-gradient(135deg, #ffffff, #eef1ff);
 }
 
 .login-container > div:first-child {
