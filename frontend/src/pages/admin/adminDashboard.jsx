@@ -50,21 +50,17 @@ const AdminDashboard = () => {
 
   return (
     <div className="container py-4">
-      <TargetCursor 
-        spinDuration={2}
-        hideDefaultCursor={true}
-      />
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold">Admin Dashboard</h2>
         <div className="d-flex gap-2">
           <button
-            className="btn btn-primary cursor-target"
+            className="btn btn-primary"
             onClick={() => setShowForm(true)}
           >
             <i className="bi bi-plus-circle me-2"></i>Create Job
           </button>
           <button
-            className="btn btn-danger cursor-target"
+            className="btn btn-danger"
             onClick={() => navigate("/")}
           >
             Logout
@@ -73,7 +69,7 @@ const AdminDashboard = () => {
       </div>
 
       <div className="row mb-4">
-        <div className="col-md-6 mb-3 cursor-target">
+        <div className="col-md-6 mb-3">
           <div className="card text-center shadow-sm">
             <div className="card-body">
               <h3 className="fw-bold">{jobs.length}</h3>
@@ -81,7 +77,7 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="col-md-6 mb-3 cursor-target">
+        <div className="col-md-6 mb-3">
           <div className="card text-center shadow-sm">
             <div className="card-body">
               <h3 className="fw-bold">{applicationsCount}</h3>
@@ -120,7 +116,7 @@ const AdminDashboard = () => {
                       <td>{new Date(job.createdAt).toLocaleDateString()}</td>
                       <td>
                         <button
-                          className="btn btn-link text-primary p-0 cursor-target"
+                          className="btn btn-link text-primary p-0"
                           onClick={() => handleViewApplications(job._id)}
                         >
                           View Applications &rarr;

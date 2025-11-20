@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/applicantApplications.css";
-import TargetCursor from "../../components/TargetCursor";
+// import TargetCursor from "../../components/TargetCursor";
 
 const Applications = () => {
   const [applications, setApplications] = useState([]);
@@ -51,10 +51,6 @@ const Applications = () => {
 
   return (
     <div className="container my-5">
-      <TargetCursor
-        spinDuration={2}
-        hideDefaultCursor={true}
-      />
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <button
